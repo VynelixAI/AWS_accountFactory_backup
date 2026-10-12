@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: >
+  Account Request product.
+  Service Catalog invokes the account-request Lambda,
+  which creates a CodeCommit pull request.
+  After approval and merge, CodePipeline runs Terraform.
+
+Parameters:
+
+  AccountName:
+    Type: String
+    Description: Unique AWS account name
+    AllowedPattern: "^[a-zA-Z][a-zA-Z0-9-]{1,62}$"
+
+  AccountEmail:
+    Type: String
+    Description: Unique root email for the AWS account
+
+  OrganizationalUnit:
+    Type: String
+    Default: "Sandbox"
+    Description: AWS Organizations OU name
+
+  RoleName:
+    Type: String
+    Default: "OrganizationAccountAccessRole"
+
+  ChangeRequestedBy:
+    Type: String
+    Default: "service-catalog"
+
+  ChangeReason:
+    Type: String
+    Default: "Account request via Service Catalog"
+
+  Operation:
+    Type: String
+    Default: "CREATE"
+    AllowedValues:
+      - CREATE
+      - DELETE
+
+  AccountTags:
+    Type: String
+    Default: ""
+    Description: "Optional tags key=value,key2=value2"
+
+
+Resources:
+
+  AccountRequest:
+    Type: Custom::AccountRequest
+
+    Properties:
+
+      ServiceToken: arn:aws:lambda:us-east-1:635914086314:function:account-factory-account-request-handler
+
+      AccountName: !Ref AccountName
+
+      AccountEmail: !Ref AccountEmail
+
+      OrganizationalUnit: !Ref OrganizationalUnit
+
+      RoleName: !Ref RoleName
+
+      ChangeRequestedBy: !Ref ChangeRequestedBy
+
+      ChangeReason: !Ref ChangeReason
+
+      Operation: !Ref Operation
+
+      AccountTags: !Ref AccountTags
+
+
+Outputs:
+
+  PullRequestUrl:
+    Description: Pull request URL
+    Value: !GetAtt AccountRequest.PullRequestUrl
+
+  PullRequestId:
+    Description: Pull request ID
+    Value: !GetAtt AccountRequest.PullRequestId
+
+  Branch:
+    Description: CodeCommit branch
+    Value: !GetAtt AccountRequest.Branch
+
+  FilePath:
+    Description: Generated Terraform file
+    Value: !GetAtt AccountRequest.FilePath
+
+  Operation:
+    Description: Requested operation
+    Value: !GetAtt AccountRequest.Operation

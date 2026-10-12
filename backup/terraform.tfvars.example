@@ -1,0 +1,23 @@
+primary_region   = "us-east-1"
+secondary_region = "us-east-2"
+tertiary_region  = "us-west-2"
+
+# Tag resources with BackupWorkload = ec2 | db2 | aurora | s3 | dynamodb
+backup_tag_key = "BackupWorkload"
+
+# Diagram example is 35 days. AWS requires 90 days in cold storage, so 7 + 90 = 97.
+standard_cold_storage_after_days = 7
+standard_retention_days          = 97
+s3_retention_days                = 365
+dynamodb_pitr_retention_days     = 35
+
+# governance is removable. Use compliance only when the lock must become immutable.
+vault_lock_mode = "governance"
+
+# Accounts allowed to copy backups into this account's vaults.
+workload_account_ids = []
+organization_id      = ""
+
+alert_email       = ""
+db2_instance_user = "db2inst1"
+db2_database_name = "SAMPLE"

@@ -1,0 +1,10 @@
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/terraform.tfvars
+**/.terraform.lock.hcl
+lambda/build/
+lambda/account_request_handler.zip
+**/__pycache__/
+**/*.pyc
+.DS_Store

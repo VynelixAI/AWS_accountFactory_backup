@@ -1,0 +1,14 @@
+aws_region   = "us-east-1"
+project_name = "account-factory"
+environment  = "test"
+
+# Required — from: aws organizations list-roots --query 'Roots[0].Id' --output text
+parent_ou_id = "r-xxxx"
+
+account_request_repo_name = "account-request"
+default_branch            = "main"
+
+# Optional — your user/role ARN so you can launch the product
+# launch_role_principal_arns = [
+#   "arn:aws:iam::123456789012:user/your-user"
+# ]
